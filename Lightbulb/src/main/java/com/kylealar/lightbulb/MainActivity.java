@@ -7,30 +7,21 @@ import android.os.Bundle;
 import android.widget.ImageButton;
 import android.hardware.Camera;
 import android.content.pm.PackageManager;
-//import android.view.WindowManager;
 import android.hardware.Camera.Parameters;
 import android.util.Log;
-//import android.media.MediaPlayer;
-//import android.media.MediaPlayer.OnCompletionListener;
 import android.view.View;
-
-//used for nexus phones and tablets
-//cannot display flashlight without surface view of camera
-//1x1 will work
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
-
 
 public class MainActivity extends Activity implements Callback {
 
     public ImageButton powerButton;
 
-    private Camera camera;
-    private boolean isFlashOn;
-    private boolean hasFlash;
+    public Camera camera;
+    public boolean isFlashOn;
+    public boolean hasFlash;
     Parameters params;
-    //MediaPlayer mediaPlayer;
     public SurfaceHolder myHolder;
     public SurfaceView preview;
 
@@ -38,23 +29,14 @@ public class MainActivity extends Activity implements Callback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d("ON CREATE", "----------------------------" + "THIS IS THE FIRST LOG FOR APP START");
 
-        //need to keep screen awake to keep flashlight on
-        //can use this or set in xml for activity
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
-          //      WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        //flashlight power button
         powerButton = (ImageButton) findViewById(R.id.powerButton);
 
         //check if hardware flash is supported
+        //show error message for now, blank white screen with max brightness in the future
         hasFlash = getApplicationContext().getPackageManager()
                 .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
-
-        //no hardware flash
-        //show error message for now, blank white screen with max brightness in the future
-
-        //check if there is no hasFlash, avoid catching null pointer exception
         if (!hasFlash) {
             Log.d("NO FLASH PRESENT"," " + "DEVICE DOES NOT HAVE FLASH");
             AlertDialog alert = new AlertDialog.Builder(MainActivity.this).create();
@@ -62,32 +44,6 @@ public class MainActivity extends Activity implements Callback {
             alert.setMessage("Your device does not support hardware flashlights. " +
                     "A software solution is planned for future release. " +
                     "The app will now close");
-            alert.setButton(AlertDialog.BUTTON_POSITIVE, "Okay",
-                    new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //close the application for now
-                    finish();
-                }
-            });
-            alert.show();
-            return;
-        }
-
-        //create surface view and holder to allow nexus to use flash
-        try {
-        preview = (SurfaceView) findViewById(R.id.PREVIEW);
-        myHolder = preview.getHolder();
-        myHolder.addCallback(this);
-        camera = Camera.open();
-        camera.setPreviewDisplay(myHolder);
-        Log.d("SURFACE HOLDER"," " + "ADDING THE CAMERA PREVIEW TO THE SURFACE HOLDER");
-        }
-        catch (Exception e) {
-            AlertDialog alert = new AlertDialog.Builder(MainActivity.this).create();
-            alert.setTitle("Error");
-            alert.setMessage("This app has some issues on Nexus devices. " +
-                    "Wait for bug fixes.");
             alert.setButton(AlertDialog.BUTTON_POSITIVE, "Okay",
                     new DialogInterface.OnClickListener() {
                         @Override
@@ -98,51 +54,41 @@ public class MainActivity extends Activity implements Callback {
                     });
             alert.show();
             return;
+        } else {
+            Log.d("HAS FLASH = TRUE", "NOTHING TO SEE HERE, NOT THE PROBLEM");
         }
 
         getCamera();
         toggleButtonImage();
 
+        try {
+            preview = (SurfaceView) findViewById(R.id.PREVIEW);
+            myHolder = preview.getHolder();
+            myHolder.addCallback(this);
+            camera = Camera.open();
+            camera.setPreviewDisplay(myHolder);
+            Log.d("SURFACE HOLDER"," " + "ADDING THE CAMERA PREVIEW TO THE SURFACE HOLDER");
+        }
+        catch (Exception e) {
+            Log.e("SURFACE HOLDER"," " + "I HAVE NO IDEA WHAT'S WRONG, BUT IT'S PROBABLY FINE");
+
+        }
+
+        flashOn();
+
         powerButton.setOnClickListener(new View.OnClickListener() {
-            //turn flash on or off depending on current state when button clicked
             @Override
             public void onClick(View v) {
                 if (isFlashOn) {
                     flashOff();
+                    Log.d("CLICKING THE BUTTON", " " + "BUTTONS CALLS FLASH OFF");
                 } else {
                     flashOn();
+                    Log.d("CLICKING THE BUTTON", " " + "BUTTON CALLS FLASH ON");
                 }
-                Log.d("CLICKING THE BUTTON!!! !:!:! !:! ", "" + v.getId());
             }
         });
     }
-
-    //surface holder for nexus camera
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-    }
-
-    //surface holder for nexus camera
-    public void surfaceCreated(SurfaceHolder holder) {
-        Log.d("SURFACE CREATED"," " + "surfaceCreated");
-        try {
-        myHolder = holder;
-        camera.setPreviewDisplay(myHolder);
-        }
-        catch (Exception e){
-            finish();
-        }
-    }
-
-    //surface holder for nexus camera
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        Log.d("SURFACE DESTROYED"," " + "surfaceDestroyed");
-        camera.stopPreview();
-        myHolder = null;
-    }
-
-    //remove if statements from flashOn and flashOff
-    //call the right one from the button click
 
     private void flashOn() {
         Log.d("FLASH ON"," " + "flashOn");
@@ -150,24 +96,16 @@ public class MainActivity extends Activity implements Callback {
             if (camera == null || params == null) {
                 return;
             }
-        //play sound when clicking button
-        //powerButtonNoise();
-
-        //get parameters of camera
         params = camera.getParameters();
-
-        //set flash mode to torch for parameter
         params.setFlashMode(Parameters.FLASH_MODE_TORCH);
-
-        //set parameter of the camera to the parameter we just got
         camera.setParameters(params);
-
-        //start camera to turn on flash
         camera.startPreview();
+
         isFlashOn = true;
 
-        //change button image between on and off
         toggleButtonImage();
+        } else {
+            Log.d("FLASH ON FAILED", " " + "flashOn else");
         }
     }
 
@@ -177,17 +115,16 @@ public class MainActivity extends Activity implements Callback {
             if (camera == null || params == null) {
                 return;
             }
-        //powerButtonNoise();
-
         params = camera.getParameters();
         params.setFlashMode(Parameters.FLASH_MODE_OFF);
-
         camera.setParameters(params);
         camera.stopPreview();
 
         isFlashOn = false;
 
         toggleButtonImage();
+        } else {
+            Log.d("FLASH OFF FAILED", " " + "flashOff else");
         }
     }
 
@@ -201,23 +138,8 @@ public class MainActivity extends Activity implements Callback {
         }
     }
 
-    //need to define a subtitle manager?
-    //play a sound when the method is called
-    /*
-    private void powerButtonNoise() {
-        mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.button_click);
-        mediaPlayer.setOnCompletionListener(new OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                //release the media player one the sound is played
-                mp.release();
-            }
-        });
-    }
-    */
-
     //call this on start, get the camera parameters
-    private void getCamera() throws NullPointerException {
+    private void getCamera() {
         Log.d("CAMERA"," " + "getCamera");
         if (camera == null) {
             try {
@@ -230,10 +152,37 @@ public class MainActivity extends Activity implements Callback {
         }
     }
 
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        Log.d("SURFACE CHANGED ", "SURFACE CHANGED " + "SURFACE CHANGED");
+    }
+
+    public void surfaceCreated(SurfaceHolder holder) {
+        Log.d("SURFACE CREATED"," " + "surfaceCreated");
+        try {
+            myHolder = holder;
+            camera.setPreviewDisplay(myHolder);
+        }
+        catch (Exception e){
+            Log.e("Could not create surface holder. Error: ", e.getMessage());
+            finish();
+        }
+    }
+
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        Log.d("SURFACE DESTROYED"," " + "surfaceDestroyed");
+        camera.stopPreview();
+        myHolder = null;
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.d("DESTROY","" + "onDestroy");
+        if (camera!=null){
+            camera.stopPreview();
+            camera.release();
+            camera = null;
+        }
     }
 
     //turn off flashlight when app is paused
@@ -256,7 +205,10 @@ public class MainActivity extends Activity implements Callback {
         super.onResume();
         Log.d("RESUME"," " + "onResume");
         //make sure to check that the device has a flash in the first place!
-        if(hasFlash) {
+
+        hasFlash = getApplicationContext().getPackageManager()
+                .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+        if(!hasFlash) {
             flashOn();
             Log.d("RESUME: ", "Starting flashlight from resume " + "onResume");
         }
