@@ -10,10 +10,25 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    signingConfigs {
+        releaseConfig {
+            storeFile file ("/Users/kylealanr/Copy/Development/Android/Keystore/lightbulb/lightbulb_keystore.jks");
+            storePassword ("ilovehali");
+            keyAlias ("lightbulb_key");
+            keyPassword ("ilovehali");
+
+        }
+    }
     buildTypes {
         release {
             runProguard false
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.releaseConfig
+        }
+        debug {
+            debuggable true
+            packageNameSuffix ".debug"
         }
     }
 }
