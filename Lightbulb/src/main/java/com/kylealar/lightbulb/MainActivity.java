@@ -3,6 +3,7 @@ package com.kylealar.lightbulb;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.hardware.Camera;
@@ -13,6 +14,9 @@ import android.view.View;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
+
+import com.readystatesoftware.systembartint.SystemBarTintManager;
+
 
 public class MainActivity extends Activity implements Callback {
 
@@ -30,6 +34,11 @@ public class MainActivity extends Activity implements Callback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d("ON CREATE", "----------------------------" + "THIS IS THE FIRST LOG FOR APP START");
+
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        // enable status bar tint
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setTintColor(Color.parseColor("#dd5800"));
 
         powerButton = (ImageButton) findViewById(R.id.powerButton);
 
