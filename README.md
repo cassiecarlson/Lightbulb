@@ -3,6 +3,6 @@ lightbulb
 
 Simple flashlight app.
 
-App is currently fully functional.
+App is currently fully functional. Bug onResume needs to be addressed in this branch.
 
-Future changes may include a solution for devices without a hardware flash, and the ability to use the flashlight in the background.
+The purpose of this branch is to use as code for a quick tutorial so I can use the master branch to test features for other projects.
