@@ -215,12 +215,16 @@ public class MainActivity extends Activity implements Callback {
         Log.d("RESUME"," " + "onResume");
         //make sure to check that the device has a flash in the first place!
 
+        /*
         hasFlash = getApplicationContext().getPackageManager()
                 .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
         if(!hasFlash) {
             flashOn();
             Log.d("RESUME: ", "Starting flashlight from resume " + "onResume");
         }
+        */
+
+        //need to create surface view here to prevent crash
     }
 
     @Override

@@ -1,8 +1,16 @@
 <resources>
 
+    <color name="OSU_Orange">#dd5800</color>
+
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.NoActionBar">
+    <style name="AppTheme" parent="android:Theme.Holo">
         <!-- Customize your theme here. -->
+
+        <item name="android:actionBarStyle">@style/ActionBar</item>
+    </style>
+
+    <style name="ActionBar" parent="android:style/Widget.Holo.ActionBar">
+        <item name="android:background">@color/OSU_Orange</item>
     </style>
 
 </resources>
