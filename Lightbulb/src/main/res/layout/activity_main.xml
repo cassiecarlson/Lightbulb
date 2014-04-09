@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,8 +16,6 @@
         android:id="@+id/PREVIEW"
         android:layout_width="1dip"
         android:layout_height="1dip"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
         android:visibility="visible"
     />
 
@@ -25,9 +23,9 @@
         android:id="@+id/powerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
         android:src="@drawable/flashlight_off"
         android:clickable="false"
         android:background="@null"/>
-</RelativeLayout>
+</FrameLayout>
+
