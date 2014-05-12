@@ -4,5 +4,6 @@
     <string name="app_name">Lightbulb</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
+    <string name="about">"About"</string>
+    <string name="name">"Kyle Riedemann"</string>
 </resources>

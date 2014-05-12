@@ -5,6 +5,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageButton;
 import android.hardware.Camera;
 import android.content.pm.PackageManager;
@@ -97,6 +100,24 @@ public class MainActivity extends Activity implements Callback {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater mInflater = getMenuInflater();
+        mInflater.inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.about:
+                //aboutMe();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void flashOn() {

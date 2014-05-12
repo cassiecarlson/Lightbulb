@@ -9,7 +9,7 @@
     tools:context="com.kylealar.lightbulb.MainActivity"
     android:clickable="false"
     android:keepScreenOn="true"
-    android:background="@color/OSU_White"
+    android:background="#cccccc"
     >
 
     <SurfaceView
@@ -17,15 +17,17 @@
         android:layout_width="1dip"
         android:layout_height="1dip"
         android:visibility="visible"
-    />
+        />
 
     <ImageButton
         android:id="@+id/powerButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:src="@drawable/flashlight_off"
         android:clickable="false"
-        android:background="@null"/>
+        android:background="@null"
+
+        />
 </FrameLayout>
 

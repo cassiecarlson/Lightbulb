@@ -1,7 +1,4 @@
 <resources>
-
-    <color name="OSU_Orange">#dd5800</color>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo">
         <!-- Customize your theme here. -->
